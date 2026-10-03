@@ -8,10 +8,12 @@ class Item {
     }
 
     void restock(int amount) {
-        this.stock = this.stock + amount;
+        if(amount > 0)
+            this.stock = this.stock + amount;
     }
 
     void purchase(int amount) {
-        this.stock = this.stock - amount;
+        if(amount > 0 && this.stock - amount >= 0)
+            this.stock = this.stock - amount;
     }
 }
