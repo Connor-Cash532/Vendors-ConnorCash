@@ -29,7 +29,8 @@ class Vending {
      * @param amt how much money to add
      * */
     void addMoney (double amt) {
-        this.balance = this.balance + amt;
+        if(amt > 0)
+            this.balance = this.balance + amt;
     }
 
     /** attempt to purchase named item.  Message returned if

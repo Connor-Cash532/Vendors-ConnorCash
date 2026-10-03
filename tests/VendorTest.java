@@ -19,11 +19,14 @@ public class VendorTest {
         System.setOut(ORIGINAL_OUT);
     }
     @Test
-    void addition() {
+    void addMoney() {
         Vending v1 = new Vending(10, 10);
         v1.addMoney(2);
+        v1.addMoney(-2);
+        v1.addMoney(0);
         assertEquals(2, v1.getBalance());
     }
+
 
     /**
      * Test for buying an item that is in stock and user has money.
@@ -60,6 +63,5 @@ public class VendorTest {
         String expectedOutput = "Gimme more money" + System.lineSeparator();
         assertEquals(expectedOutput, OUTPUT_STREAM.toString());
     }
-
 
 }
