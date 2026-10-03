@@ -123,4 +123,16 @@ public class VendorTest {
         assertEquals(8.00, v1.getBalance());
 
     }
+
+    @Test
+    void changeItemName(){
+        Vending v1 = new Vending(1, 2);
+        v1.addMoney(10);
+        v1.changeName("Gum", "Pineapple");
+        v1.select("Pineapple");
+        assertEquals(9.50, v1.getBalance());
+        v1.select("Gum");
+        String expectedOutput = "Sorry, don't know that item" + System.lineSeparator();
+        assertEquals(expectedOutput, OUTPUT_STREAM.toString());
+    }
 }

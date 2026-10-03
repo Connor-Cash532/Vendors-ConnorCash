@@ -84,6 +84,13 @@ class Vending {
         i.restock(maxStocks.get(name));
     }
 
+    void changeName(String oldName, String newName){
+        if(Stock.containsKey(oldName)){
+            Item i = Stock.get(oldName);
+            Stock.put(newName, i);
+            Stock.remove(oldName);
+        }
+    }
 }
 
 class Examples {
