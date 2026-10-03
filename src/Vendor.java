@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -8,10 +9,13 @@ import java.util.HashMap;
 class Vending {
     private static HashMap<String, Item> Stock = new HashMap<String,Item>();
     private double balance;
+    private static HashMap<String, Integer> maxStocks = new HashMap<>();
 
     Vending(int numCandy, int numGum) {
         Stock.put("Candy", new Item(1.25, numCandy));
         Stock.put("Gum", new Item(.5, numGum));
+        maxStocks.put("Candy", numCandy);
+        maxStocks.put("Gum", numGum);
         this.balance = 0;
     }
 
@@ -60,6 +64,13 @@ class Vending {
                 System.out.println("Gimme more money");
         }
         else System.out.println("Sorry, don't know that item");
+    }
+
+    void restock(){
+        for(String s : Stock.keySet()){
+            Item i  = Stock.get(s);
+            i.restock(maxStocks.get(s));
+        }
     }
 
 }

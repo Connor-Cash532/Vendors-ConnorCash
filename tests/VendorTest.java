@@ -91,4 +91,23 @@ public class VendorTest {
         assertEquals(expectedOutput, OUTPUT_STREAM.toString());
     }
 
+    /**
+     * Test for restock() method in Vendor.java
+     */
+    @Test
+    void restockVendor(){
+        Vending v1 = new Vending(1, 1);
+        v1.addMoney(10);
+        v1.select("Gum");
+        v1.select("Candy");
+        v1.select("Candy");
+        String expectedOutput = "Vending machine is empty" + System.lineSeparator();
+        assertEquals(expectedOutput, OUTPUT_STREAM.toString());
+        v1.restock();
+        v1.select("Gum");
+        assertEquals(7.75, v1.getBalance());
+        v1.select("Candy");
+        assertEquals(6.50, v1.getBalance());
+    }
+
 }
