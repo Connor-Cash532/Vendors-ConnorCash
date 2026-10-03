@@ -95,7 +95,7 @@ public class VendorTest {
      * Test for restock() method in Vendor.java
      */
     @Test
-    void restockVendor(){
+    void restockEntireVendor(){
         Vending v1 = new Vending(1, 1);
         v1.addMoney(10);
         v1.select("Gum");
@@ -103,11 +103,24 @@ public class VendorTest {
         v1.select("Candy");
         String expectedOutput = "Vending machine is empty" + System.lineSeparator();
         assertEquals(expectedOutput, OUTPUT_STREAM.toString());
-        v1.restock();
+        v1.restockEntireVendor();
         v1.select("Gum");
         assertEquals(7.75, v1.getBalance());
         v1.select("Candy");
         assertEquals(6.50, v1.getBalance());
     }
 
+    @Test
+    void restockSingleItem(){
+        Vending v1 = new Vending(1, 2);
+        v1.addMoney(10);
+        v1.select("Gum");
+        v1.select("Gum");
+        v1.select("Gum");
+        v1.select("Gum");
+        assertEquals(8.50, v1.getBalance());
+        v1.select("Gum");
+        assertEquals(8.00, v1.getBalance());
+
+    }
 }

@@ -10,6 +10,7 @@ class Vending {
     private static HashMap<String, Item> Stock = new HashMap<String,Item>();
     private double balance;
     private static HashMap<String, Integer> maxStocks = new HashMap<>();
+    private static HashMap<String, Item> newItems = new HashMap<>();
 
     Vending(int numCandy, int numGum) {
         Stock.put("Candy", new Item(1.25, numCandy));
@@ -54,8 +55,10 @@ class Vending {
         }
         if (Stock.containsKey(name)) {
             Item item = Stock.get(name);
-            if (item.stock <= 0)
+            if (item.stock <= 0) {
                 System.out.println("Item is out of stock");
+                restockItem(name);
+            }
             else if (balance >= item.price) {
                 item.purchase(1);
                 this.balance = this.balance - item.price;
@@ -63,14 +66,22 @@ class Vending {
             else
                 System.out.println("Gimme more money");
         }
-        else System.out.println("Sorry, don't know that item");
+        else {
+            //Item i = new Item(, )
+            System.out.println("Sorry, don't know that item");
+        }
     }
 
-    void restock(){
+    void restockEntireVendor(){
         for(String s : Stock.keySet()){
             Item i  = Stock.get(s);
             i.restock(maxStocks.get(s));
         }
+    }
+
+    void restockItem(String name){
+        Item i = Stock.get(name);
+        i.restock(maxStocks.get(name));
     }
 
 }
