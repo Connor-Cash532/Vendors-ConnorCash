@@ -33,15 +33,26 @@ class Vending {
             this.balance = this.balance + amt;
     }
 
-    /** attempt to purchase named item.  Message returned if
-     * the balance isn't sufficient to cover the item cost.
-     *
+    /** Message returned if vending machine has no items in stock.
+     * attempt to purchase named item.  Message is returned if selected item is out of stock.
+     * Message returned if the balance isn't sufficient to cover the item cost.
+     * Message is returned if selected item is not in the stock of the vending machine.
      * @param name The name of the item to purchase ("Candy" or "Gum")
      */
     void select (String name) {
+        int stockSum = 0;
+        for(Item i : Stock.values()){
+            stockSum += i.stock;
+        }
+        if(stockSum == 0){
+            System.out.println("Vending machine is empty");
+            return;
+        }
         if (Stock.containsKey(name)) {
             Item item = Stock.get(name);
-            if (balance >= item.price) {
+            if (item.stock <= 0)
+                System.out.println("Item is out of stock");
+            else if (balance >= item.price) {
                 item.purchase(1);
                 this.balance = this.balance - item.price;
             }
