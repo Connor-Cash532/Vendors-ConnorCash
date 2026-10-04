@@ -1,5 +1,8 @@
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -7,10 +10,10 @@ import java.util.HashMap;
  * well as the current balance of money that has been deposited into the machine.
  */
 class Vending {
-    private static HashMap<String, Item> Stock = new HashMap<String,Item>();
+    private HashMap<String, Item> Stock = new HashMap<String,Item>();
     private double balance;
-    private static HashMap<String, Integer> maxStocks = new HashMap<>();
-    private static HashMap<String, Item> newItems = new HashMap<>();
+    private HashMap<String, Integer> maxStocks = new HashMap<>();
+    private HashMap<String, Item> newItems = new HashMap<>();
 
     Vending(int numCandy, int numGum) {
         Stock.put("Candy", new Item(1.25, numCandy));
@@ -72,6 +75,9 @@ class Vending {
         }
     }
 
+    /**
+     * Method that sets all items in the vending map back to their maximum stocks
+     */
     void restockEntireVendor(){
         for(String s : Stock.keySet()){
             Item i  = Stock.get(s);
@@ -79,11 +85,20 @@ class Vending {
         }
     }
 
+    /**
+     * Method that sets an item that was selected an out of stock back to its maximum stock
+     * @param name
+     */
     void restockItem(String name){
         Item i = Stock.get(name);
         i.restock(maxStocks.get(name));
     }
 
+    /**
+     * Method to change the name of an Item in the vending map.
+     * @param oldName
+     * @param newName
+     */
     void changeName(String oldName, String newName){
         if(Stock.containsKey(oldName)){
             Item i = Stock.get(oldName);
@@ -91,8 +106,45 @@ class Vending {
             Stock.remove(oldName);
         }
     }
+
+    @Override
+    public String toString(){
+        String s = "";
+        DecimalFormat df = new DecimalFormat("##0.00");
+        String tempCost;
+        Item temp;
+        for(String i : Stock.keySet()){
+            temp = Stock.get(i);
+            tempCost = df.format(temp.price);
+            s += "Item Name: " + i + "\n";
+            s += "Quantity in stock: " + temp.stock + "\n";
+            s += "Cost (USD): " + tempCost + "\n\n";
+        }
+        return s;
+    }
 }
 
 class Examples {
 }
 
+class Vendors{
+    private HashMap<String, Vending> allVendors = new HashMap<>();
+
+    public void addVendors(String vendorName, Vending v){
+        allVendors.put(vendorName, v);
+    }
+
+    @Override
+    public String toString(){
+        String s = "";
+        Vending temp;
+        List<String> list = new ArrayList<>(allVendors.keySet());
+        Collections.sort(list);
+        for(String i : list){
+            temp = allVendors.get(i);
+            s += "Vendor Name: " + i + "\n";
+            s += temp.toString();
+        }
+        return s;
+    }
+}

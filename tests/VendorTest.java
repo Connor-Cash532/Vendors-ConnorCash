@@ -65,7 +65,7 @@ public class VendorTest {
      */
     @Test
     void buyItemWithInsufficientMoney(){
-        Vending v1 = new Vending(1, 1);
+        Vending v1 = new Vending(1, 2);
         v1.addMoney(0.50);
         v1.select("Gum");
         assertEquals(0, v1.getBalance());
@@ -134,5 +134,44 @@ public class VendorTest {
         v1.select("Gum");
         String expectedOutput = "Sorry, don't know that item" + System.lineSeparator();
         assertEquals(expectedOutput, OUTPUT_STREAM.toString());
+    }
+
+    @Test
+    void vendors(){
+        Vending v1 = new Vending(1, 2);
+        Vending v2 = new Vending(1, 2);
+        Vending v3 = new Vending(1, 2);
+
+        Vendors v = new Vendors();
+        v.addVendors("Jon's Store", v1);
+        v.addVendors("Jim's Store", v2);
+        v.addVendors("Jane's Store", v3);
+
+        String expected = "";
+        expected += "Vendor Name: Jane's Store\n";
+        expected += "Item Name: Candy\nQuantity in stock: 1\nCost (USD): 1.25\n\n" +
+                "Item Name: Gum\nQuantity in stock: 2\nCost (USD): 0.50\n\n";
+        expected += "Vendor Name: Jim's Store\n";
+        expected += "Item Name: Candy\nQuantity in stock: 1\nCost (USD): 1.25\n\n" +
+                "Item Name: Gum\nQuantity in stock: 2\nCost (USD): 0.50\n\n";
+        expected += "Vendor Name: Jon's Store\n";
+        expected += "Item Name: Candy\nQuantity in stock: 1\nCost (USD): 1.25\n\n" +
+                "Item Name: Gum\nQuantity in stock: 2\nCost (USD): 0.50\n\n";
+        assertEquals(expected, v.toString());
+
+    }
+
+    @Test
+    void vendingToString(){
+        Vending v1 = new Vending(1, 2);
+        String expected= "Item Name: Candy\nQuantity in stock: 1\nCost (USD): 1.25\n\n" +
+                "Item Name: Gum\nQuantity in stock: 2\nCost (USD): 0.50\n\n";
+        assertEquals(expected, v1.toString());
+        v1.addMoney(10);
+        v1.select("Candy");
+        expected= "Item Name: Candy\nQuantity in stock: 0\nCost (USD): 1.25\n\n" +
+                "Item Name: Gum\nQuantity in stock: 2\nCost (USD): 0.50\n\n";
+        assertEquals(expected, v1.toString());
+
     }
 }
