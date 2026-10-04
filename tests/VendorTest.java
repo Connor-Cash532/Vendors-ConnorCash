@@ -2,6 +2,7 @@ import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -197,5 +198,18 @@ public class VendorTest {
 
         v1.removeItem("Tree");
         assertEquals(expected, v1.toString());
+    }
+
+    @Test
+    void kFrequentPurchasedItems(){
+        Vending v1 = new Vending(1, 2);
+        v1.select("Candy");
+        v1.select("Oreo");
+
+        String[] expected = {"Candy", "Gum"};
+        assertEquals(Arrays.toString(expected), Arrays.toString(v1.topKPurchasedItems(2)));
+        assertEquals(Arrays.toString(expected), Arrays.toString(v1.topKPurchasedItems(3)));
+        v1.removeItem("Candy");
+        assertEquals(Arrays.toString(expected), Arrays.toString(v1.topKPurchasedItems(2)));
     }
 }

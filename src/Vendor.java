@@ -1,8 +1,6 @@
+import java.lang.reflect.Array;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -11,6 +9,7 @@ import java.util.List;
  */
 class Vending {
     private HashMap<String, Item> Stock = new HashMap<String,Item>();
+    private HashMap<String, Integer> purchases = new HashMap<>();
     private double balance;
     private HashMap<String, Integer> maxStocks = new HashMap<>();
     private HashMap<String, Item> newItems = new HashMap<>();
@@ -20,6 +19,8 @@ class Vending {
         Stock.put("Gum", new Item(.5, numGum));
         maxStocks.put("Candy", numCandy);
         maxStocks.put("Gum", numGum);
+        purchases.put("Candy", 0);
+        purchases.put("Gum", 0);
         this.balance = 0;
     }
 
@@ -64,6 +65,7 @@ class Vending {
             }
             else if (balance >= item.price) {
                 item.purchase(1);
+                purchases.replace(name, purchases.get(name) + 1);
                 this.balance = this.balance - item.price;
             }
             else
@@ -109,6 +111,35 @@ class Vending {
 
     public void removeItem(String name){
         Stock.remove(name);
+    }
+
+    /**
+     *
+     * @param k
+     * @return k most frequently purchased items
+     */
+    public String[] topKPurchasedItems(int k){
+        String[] keys = purchases.keySet().toArray(new String[0]);
+
+        if(k >= purchases.size())
+            return keys;
+        String[] kFrequent = new String[k];
+        List<Integer> frequencies = new ArrayList<>(purchases.values());
+        int[] kFrequencies = new int[k];
+        frequencies.sort(Collections.reverseOrder());
+        for(int i = 0; i < k; i++){
+            kFrequencies[i] = frequencies.get(i);
+        }
+
+        int count = 0;
+        for(int i = 0; i < keys.length && count < k; i++){
+            if(purchases.get(keys[i]) == kFrequencies[count]){
+                kFrequent[count] = keys[i];
+                count++;
+            }
+        }
+        Arrays.sort(kFrequent);
+        return kFrequent;
     }
 
     @Override
