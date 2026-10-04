@@ -5,6 +5,7 @@ import java.io.PrintStream;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class VendorTest {
     private final ByteArrayOutputStream OUTPUT_STREAM = new ByteArrayOutputStream();
@@ -173,5 +174,28 @@ public class VendorTest {
                 "Item Name: Gum\nQuantity in stock: 2\nCost (USD): 0.50\n\n";
         assertEquals(expected, v1.toString());
 
+    }
+
+    @Test
+    void vendingEmptyToString(){
+        Vending v1 = new Vending(1, 2);
+        String expected= "";
+        v1.removeItem("Candy");
+        v1.removeItem("Gum");
+        v1.removeItem("Tree");
+        assertEquals(expected, v1.toString());
+    }
+
+    @Test
+    void removeItems(){
+        Vending v1 = new Vending(1, 2);
+        v1.removeItem("Candy");
+
+        String expected = "";
+        expected += "Item Name: Gum\nQuantity in stock: 2\nCost (USD): 0.50\n\n";
+        assertEquals(expected, v1.toString());
+
+        v1.removeItem("Tree");
+        assertEquals(expected, v1.toString());
     }
 }

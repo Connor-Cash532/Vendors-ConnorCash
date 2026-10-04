@@ -107,6 +107,10 @@ class Vending {
         }
     }
 
+    public void removeItem(String name){
+        Stock.remove(name);
+    }
+
     @Override
     public String toString(){
         String s = "";
