@@ -9,6 +9,8 @@ import java.util.*;
  */
 class Vendor {
     private HashMap<String, Item> stock = new HashMap<String,Item>();
+    private HashMap<String, Item> bestsellers = new HashMap<String,Item>();
+
     private HashMap<String, Integer> purchases = new HashMap<>();
     private double balance;
     private HashMap<String, Integer> maxStocks = new HashMap<>();
@@ -71,6 +73,7 @@ class Vendor {
                 else{
                     this.balance = this.balance - item.price;
                 }
+                findBestsellers();
                 return name + " purchased";
             }
             else
@@ -146,6 +149,44 @@ class Vendor {
         }
         Arrays.sort(kFrequent);
         return kFrequent;
+    }
+
+    public void findBestsellers(){
+        List<Integer> frequencies = new ArrayList<>(purchases.values());
+        frequencies.sort(Collections.reverseOrder());
+        int median;
+        if(frequencies.size() % 2 != 0)
+            median = frequencies.get( frequencies.size() / 2);
+        else
+            median = (frequencies.get( frequencies.size() / 2) + frequencies.get( (frequencies.size() / 2) - 1 )) / 2;
+
+        Item tempItem;
+        int tempPurchases;
+        for(String n : stock.keySet()){
+            tempPurchases = purchases.get(n);
+            if(tempPurchases > median * 2){
+                tempItem = stock.get(n);
+                tempItem.bestseller = true;
+                stock.replace(n, tempItem);
+            }
+            else{
+                tempItem = stock.get(n);
+                tempItem.bestseller = false;
+                stock.replace(n, tempItem);
+            }
+        }
+
+        HashMap<String, Item> temp = new HashMap<>();
+        for(String n : stock.keySet()){
+            if(stock.get(n).bestseller)
+                temp.put(n, stock.get(n));
+        }
+        bestsellers = temp;
+    }
+
+
+    public HashMap<String, Item> getStock() {
+        return stock;
     }
 
     @Override

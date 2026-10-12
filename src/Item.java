@@ -7,7 +7,7 @@ class Item {
     boolean onSale;
     String details;
     String benefits;
-
+    boolean bestseller;
     Item(double price, int numPieces) {
         this.price = price;
         discountedPrice = price;
@@ -15,6 +15,7 @@ class Item {
         this.stock = numPieces;
         this.details = "";
         this.benefits = "";
+        bestseller = false;
     }
 
     void restock(int amount) {
