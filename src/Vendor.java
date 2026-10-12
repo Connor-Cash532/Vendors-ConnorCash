@@ -4,19 +4,19 @@ import java.util.*;
 
 
 /**
- * Class for a Vending Machine.  Contains a hashtable mapping item names to item data, as
+ * Class for a Vendor Machine.  Contains a hashtable mapping item names to item data, as
  * well as the current balance of money that has been deposited into the machine.
  */
-class Vending {
-    private HashMap<String, Item> Stock = new HashMap<String,Item>();
+class Vendor {
+    private HashMap<String, Item> stock = new HashMap<String,Item>();
     private HashMap<String, Integer> purchases = new HashMap<>();
     private double balance;
     private HashMap<String, Integer> maxStocks = new HashMap<>();
     private HashMap<String, Item> newItems = new HashMap<>();
 
-    Vending(int numCandy, int numGum) {
-        Stock.put("Candy", new Item(1.25, numCandy));
-        Stock.put("Gum", new Item(.5, numGum));
+    Vendor(int numCandy, int numGum) {
+        stock.put("Candy", new Item(1.25, numCandy));
+        stock.put("Gum", new Item(.5, numGum));
         maxStocks.put("Candy", numCandy);
         maxStocks.put("Gum", numGum);
         purchases.put("Candy", 0);
@@ -48,41 +48,40 @@ class Vending {
      * Message is returned if selected item is not in the stock of the vending machine.
      * @param name The name of the item to purchase ("Candy" or "Gum")
      */
-    void select (String name) {
+    public String select (String name) {
         int stockSum = 0;
-        for(Item i : Stock.values()){
+        for(Item i : stock.values()){
             stockSum += i.stock;
         }
         if(stockSum == 0){
-            System.out.println("Vending machine is empty");
-            return;
+            return "Vendor machine is empty";
         }
-        if (Stock.containsKey(name)) {
-            Item item = Stock.get(name);
+        if (stock.containsKey(name)) {
+            Item item = stock.get(name);
             if (item.stock <= 0) {
-                System.out.println("Item is out of stock");
                 restockItem(name);
+                return "Item is out of stock";
             }
             else if (balance >= item.price) {
                 item.purchase(1);
                 purchases.replace(name, purchases.get(name) + 1);
                 this.balance = this.balance - item.price;
+                return name + " purchased";
             }
             else
-                System.out.println("Gimme more money");
+                return "Gimme more money";
+
         }
-        else {
-            //Item i = new Item(, )
-            System.out.println("Sorry, don't know that item");
-        }
+        return "Sorry, don't know that item";
+
     }
 
     /**
      * Method that sets all items in the vending map back to their maximum stocks
      */
     void restockEntireVendor(){
-        for(String s : Stock.keySet()){
-            Item i  = Stock.get(s);
+        for(String s : stock.keySet()){
+            Item i  = stock.get(s);
             i.restock(maxStocks.get(s));
         }
     }
@@ -92,7 +91,7 @@ class Vending {
      * @param name
      */
     void restockItem(String name){
-        Item i = Stock.get(name);
+        Item i = stock.get(name);
         i.restock(maxStocks.get(name));
     }
 
@@ -102,15 +101,17 @@ class Vending {
      * @param newName
      */
     void changeName(String oldName, String newName){
-        if(Stock.containsKey(oldName)){
-            Item i = Stock.get(oldName);
-            Stock.put(newName, i);
-            Stock.remove(oldName);
+        if(stock.containsKey(oldName)){
+            Item i = stock.get(oldName);
+            stock.put(newName, i);
+            purchases.put(newName, 0);
+            maxStocks.put(newName, maxStocks.get(oldName));
+            stock.remove(oldName);
         }
     }
 
     public void removeItem(String name){
-        Stock.remove(name);
+        stock.remove(name);
     }
 
     /**
@@ -148,37 +149,12 @@ class Vending {
         DecimalFormat df = new DecimalFormat("##0.00");
         String tempCost;
         Item temp;
-        for(String i : Stock.keySet()){
-            temp = Stock.get(i);
+        for(String i : stock.keySet()){
+            temp = stock.get(i);
             tempCost = df.format(temp.price);
             s += "Item Name: " + i + "\n";
             s += "Quantity in stock: " + temp.stock + "\n";
             s += "Cost (USD): " + tempCost + "\n\n";
-        }
-        return s;
-    }
-}
-
-class Examples {
-}
-
-class Vendors{
-    private HashMap<String, Vending> allVendors = new HashMap<>();
-
-    public void addVendors(String vendorName, Vending v){
-        allVendors.put(vendorName, v);
-    }
-
-    @Override
-    public String toString(){
-        String s = "";
-        Vending temp;
-        List<String> list = new ArrayList<>(allVendors.keySet());
-        Collections.sort(list);
-        for(String i : list){
-            temp = allVendors.get(i);
-            s += "Vendor Name: " + i + "\n";
-            s += temp.toString();
         }
         return s;
     }

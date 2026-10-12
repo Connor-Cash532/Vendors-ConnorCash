@@ -1,10 +1,16 @@
+import java.util.Scanner;
+
 class Item {
     double price;
     int stock;
+    String details;
+    String benefits;
 
     Item(double price, int numPieces) {
         this.price = price;
         this.stock = numPieces;
+        this.details = "";
+        this.benefits = "";
     }
 
     void restock(int amount) {

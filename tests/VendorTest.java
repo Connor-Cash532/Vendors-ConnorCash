@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -211,5 +213,10 @@ public class VendorTest {
         assertEquals(Arrays.toString(expected), Arrays.toString(v1.topKPurchasedItems(3)));
         v1.removeItem("Candy");
         assertEquals(Arrays.toString(expected), Arrays.toString(v1.topKPurchasedItems(2)));
+    }
+
+    @Test
+    void makePurchase(){
+        
     }
 }
