@@ -65,7 +65,12 @@ class Vendor {
             else if (balance >= item.price) {
                 item.purchase(1);
                 purchases.replace(name, purchases.get(name) + 1);
-                this.balance = this.balance - item.price;
+                if(item.onSale){
+                    this.balance = this.balance - item.discountedPrice;
+                }
+                else{
+                    this.balance = this.balance - item.price;
+                }
                 return name + " purchased";
             }
             else
@@ -157,5 +162,30 @@ class Vendor {
             s += "Cost (USD): " + tempCost + "\n\n";
         }
         return s;
+    }
+
+    /**
+     * Changes a item to be in the vending hashmap to be on sale
+     * @param itemName
+     * @param discountPrice
+     */
+    public void putItemOnSale(String itemName, double discountPrice){
+        if(stock.containsKey(itemName) && discountPrice >= 0){
+            Item i = stock.get(itemName);
+            i.setDiscountedPrice(discountPrice);
+            stock.replace(itemName, i);
+        }
+    }
+
+    /**
+     * Changes a item to no longer be on sale if it was on sale
+     * @param itemName
+     */
+    public void endItemSale(String itemName){
+        if(stock.containsKey(itemName)){
+            Item i = stock.get(itemName);
+            i.endDiscountPrice();
+            stock.replace(itemName, i);
+        }
     }
 }
