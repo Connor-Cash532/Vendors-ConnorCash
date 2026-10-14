@@ -273,6 +273,20 @@ public class VendorTest {
     }
 
     @Test
+    void addNewItems(){
+        Vendor v1 = new Vendor(5, 2);
+        v1.addMoney(10);
+        v1.select("Cookies");
+        v1.select("Soup");
+        v1.select("Mozzarella");
+        assertEquals(10, v1.getBalance());
+        v1.restockEntireVendor();
+        v1.select("Soup");
+        v1.select("Cookies");
+        assertEquals(4, v1.getBalance());
+    }
+
+    @Test
     void getItemDescription(){
         Item butter = new Item(4, 10);
         butter.setBenefits("Makes food significantly more tasty. Is very good on bread");

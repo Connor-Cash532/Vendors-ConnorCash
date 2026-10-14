@@ -14,7 +14,7 @@ class Vendor {
     private HashMap<String, Integer> purchases = new HashMap<>();
     private double balance;
     private HashMap<String, Integer> maxStocks = new HashMap<>();
-    private HashMap<String, Item> newItems = new HashMap<>();
+    private ArrayList<String> unknownItems = new ArrayList<>();
 
     Vendor(int numCandy, int numGum) {
         stock.put("Candy", new Item(1.25, numCandy));
@@ -28,7 +28,7 @@ class Vendor {
 
     Vendor(String[] names, Item[] items) {
         for(int i = 0; i < names.length; i++){
-
+            stock.put(names[i], items[i]);
         }
         this.balance = 0;
     }
@@ -72,7 +72,6 @@ class Vendor {
                 return "Item is out of stock";
             }
             else if (balance >= item.price) {
-                System.out.println(item);
                 item.purchase(1);
                 purchases.replace(name, purchases.get(name) + 1);
                 if(item.onSale){
@@ -88,6 +87,7 @@ class Vendor {
                 return "Gimme more money";
 
         }
+        unknownItems.add(name);
         return "Sorry, don't know that item";
 
     }
@@ -96,6 +96,13 @@ class Vendor {
      * Method that sets all items in the vending map back to their maximum stocks
      */
     void restockEntireVendor(){
+        for(String name : unknownItems){
+            if(VALID_ITEMS.containsKey(name)){
+                stock.put(name, VALID_ITEMS.get(name));
+                purchases.put(name, 0);
+                maxStocks.put(name, VALID_ITEMS.get(name).stock);
+            }
+        }
         for(String s : stock.keySet()){
             Item i  = stock.get(s);
             i.restock(maxStocks.get(s));
@@ -242,7 +249,7 @@ class Vendor {
         }
     }
 
-    final HashMap<String, Item> VALID_ITEMS = validItems();
+    final static HashMap<String, Item> VALID_ITEMS = validItems();
     private static HashMap<String, Item> validItems(){
         HashMap<String, Item> temp = new HashMap<>();
         temp.put("Cookies", new Item(2, (int) (100 * Math.random()) ));
