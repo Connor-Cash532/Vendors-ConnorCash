@@ -1,30 +1,15 @@
 import org.junit.jupiter.api.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.gen5.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class VendorTest {
-    private final ByteArrayOutputStream OUTPUT_STREAM = new ByteArrayOutputStream();
-    private final PrintStream ORIGINAL_OUT = System.out;
-
-    @BeforeEach
-    void setOUTPUT_STREAM(){
-        System.setOut(new PrintStream(OUTPUT_STREAM));
-    }
-    @AfterEach
-    void resetOUTPUT_STREAM(){
-        System.setOut(ORIGINAL_OUT);
-    }
     @Test
     void addMoney() {
-        Vending v1 = new Vending(10, 10);
+        Vendor v1 = new Vendor(10, 10);
         v1.addMoney(2);
         v1.addMoney(-2);
         v1.addMoney(0);
@@ -36,7 +21,7 @@ public class VendorTest {
      */
     @Test
     void buyItemInStock(){
-        Vending v1 = new Vending(1, 1);
+        Vendor v1 = new Vendor(1, 1);
         v1.addMoney(10);
         v1.select("Gum");
         assertEquals(9.50, v1.getBalance());
@@ -46,37 +31,37 @@ public class VendorTest {
      */
     @Test
     void buyItemNotInStock(){
-        Vending v1 = new Vending(1, 1);
+        Vendor v1 = new Vendor(1, 1);
         v1.addMoney(10);
-        v1.select("Oreo");
-        String expectedOutput = "Sorry, don't know that item" + System.lineSeparator();
-        assertEquals(expectedOutput, OUTPUT_STREAM.toString());
+        String expectedOutput = "Sorry, don't know that item" ;
+        String actual = v1.select("Oreo");
+        assertEquals(expectedOutput, actual);
     }
     /**
      * Test for buying an item that is out of stock.
      */
     @Test
     void buyItemOutOfStock(){
-        Vending v1 = new Vending(1, 1);
+        Vendor v1 = new Vendor(1, 1);
         v1.addMoney(10);
-        v1.select("Candy");
-        v1.select("Candy");
-        String expectedOutput = "Item is out of stock" + System.lineSeparator();
-        assertEquals(expectedOutput, OUTPUT_STREAM.toString());
+        String actual = v1.select("Candy");
+        actual = v1.select("Candy");
+        String expectedOutput = "Item is out of stock" ;
+        assertEquals(expectedOutput, actual);
     }
     /**
      * Test for not having enough money for an item in stock
      */
     @Test
     void buyItemWithInsufficientMoney(){
-        Vending v1 = new Vending(1, 2);
+        Vendor v1 = new Vendor(1, 2);
         v1.addMoney(0.50);
         v1.select("Gum");
         assertEquals(0, v1.getBalance());
-        v1.select("Gum");
+        String actual = v1.select("Gum");
         assertEquals(0, v1.getBalance());
-        String expectedOutput = "Gimme more money" + System.lineSeparator();
-        assertEquals(expectedOutput, OUTPUT_STREAM.toString());
+        String expectedOutput = "Gimme more money";
+        assertEquals(expectedOutput,actual);
     }
 
     /**
@@ -85,14 +70,14 @@ public class VendorTest {
      */
     @Test
     void emptyStock(){
-        Vending v1 = new Vending(2, 1);
+        Vendor v1 = new Vendor(2, 1);
         v1.addMoney(10);
         v1.select("Candy");
         v1.select("Candy");
         v1.select("Gum");
-        v1.select("Gum");
-        String expectedOutput = "Vending machine is empty" + System.lineSeparator();
-        assertEquals(expectedOutput, OUTPUT_STREAM.toString());
+        String actual = v1.select("Gum");
+        String expectedOutput = "Vendor machine is empty";
+        assertEquals(expectedOutput, actual);
     }
 
     /**
@@ -100,13 +85,13 @@ public class VendorTest {
      */
     @Test
     void restockEntireVendor(){
-        Vending v1 = new Vending(1, 1);
+        Vendor v1 = new Vendor(1, 1);
         v1.addMoney(10);
         v1.select("Gum");
         v1.select("Candy");
-        v1.select("Candy");
-        String expectedOutput = "Vending machine is empty" + System.lineSeparator();
-        assertEquals(expectedOutput, OUTPUT_STREAM.toString());
+        String actual = v1.select("Candy");
+        String expectedOutput = "Vendor machine is empty";
+        assertEquals(expectedOutput, actual);
         v1.restockEntireVendor();
         v1.select("Gum");
         assertEquals(7.75, v1.getBalance());
@@ -116,7 +101,7 @@ public class VendorTest {
 
     @Test
     void restockSingleItem(){
-        Vending v1 = new Vending(1, 2);
+        Vendor v1 = new Vendor(1, 2);
         v1.addMoney(10);
         v1.select("Gum");
         v1.select("Gum");
@@ -130,21 +115,21 @@ public class VendorTest {
 
     @Test
     void changeItemName(){
-        Vending v1 = new Vending(1, 2);
+        Vendor v1 = new Vendor(1, 2);
         v1.addMoney(10);
         v1.changeName("Gum", "Pineapple");
         v1.select("Pineapple");
         assertEquals(9.50, v1.getBalance());
-        v1.select("Gum");
-        String expectedOutput = "Sorry, don't know that item" + System.lineSeparator();
-        assertEquals(expectedOutput, OUTPUT_STREAM.toString());
+        String actual = v1.select("Gum");
+        String expectedOutput = "Sorry, don't know that item";
+        assertEquals(expectedOutput, actual);
     }
 
     @Test
     void vendors(){
-        Vending v1 = new Vending(1, 2);
-        Vending v2 = new Vending(1, 2);
-        Vending v3 = new Vending(1, 2);
+        Vendor v1 = new Vendor(1, 2);
+        Vendor v2 = new Vendor(1, 2);
+        Vendor v3 = new Vendor(1, 2);
 
         Vendors v = new Vendors();
         v.addVendors("Jon's Store", v1);
@@ -167,7 +152,7 @@ public class VendorTest {
 
     @Test
     void vendingToString(){
-        Vending v1 = new Vending(1, 2);
+        Vendor v1 = new Vendor(1, 2);
         String expected= "Item Name: Candy\nQuantity in stock: 1\nCost (USD): 1.25\n\n" +
                 "Item Name: Gum\nQuantity in stock: 2\nCost (USD): 0.50\n\n";
         assertEquals(expected, v1.toString());
@@ -181,7 +166,7 @@ public class VendorTest {
 
     @Test
     void vendingEmptyToString(){
-        Vending v1 = new Vending(1, 2);
+        Vendor v1 = new Vendor(1, 2);
         String expected= "";
         v1.removeItem("Candy");
         v1.removeItem("Gum");
@@ -191,7 +176,7 @@ public class VendorTest {
 
     @Test
     void removeItems(){
-        Vending v1 = new Vending(1, 2);
+        Vendor v1 = new Vendor(1, 2);
         v1.removeItem("Candy");
 
         String expected = "";
@@ -204,7 +189,7 @@ public class VendorTest {
 
     @Test
     void kFrequentPurchasedItems(){
-        Vending v1 = new Vending(1, 2);
+        Vendor v1 = new Vendor(1, 2);
         v1.select("Candy");
         v1.select("Oreo");
 
@@ -216,7 +201,74 @@ public class VendorTest {
     }
 
     @Test
-    void makePurchase(){
-        
+    void print5VendorsValid(){
+        Vendor v1 = new Vendor(1, 2);
+        Vendor v2 = new Vendor(2, 2);
+        Vendor v3 = new Vendor(1, 1);
+        Vendor v4 = new Vendor(2, 1);
+        Vendor v5 = new Vendor(1, 3);
+        Vendors v = new Vendors();
+        v.addVendors("Store 1", v1);
+        v.addVendors("Store 2", v2);
+        v.addVendors("Store 3", v3);
+        v.addVendors("Store 4", v4);
+        v.addVendors("Store 5", v5);
+
+        String actual = v.print5Vendors("Store 1", "Store 2", "Store 4", "Store 3", "Store 5");
+        String expected1 = "Vendor Name: Store 1\nItem Name: Candy\nQuantity in stock: 1\nCost (USD): 1.25\n\n" +
+            "Item Name: Gum\nQuantity in stock: 2\nCost (USD): 0.50\n\n";
+        String expected2 = "Vendor Name: Store 2\nItem Name: Candy\nQuantity in stock: 2\nCost (USD): 1.25\n\n" +
+                "Item Name: Gum\nQuantity in stock: 2\nCost (USD): 0.50\n\n";
+        String expected3 = "Vendor Name: Store 3\nItem Name: Candy\nQuantity in stock: 1\nCost (USD): 1.25\n\n" +
+                "Item Name: Gum\nQuantity in stock: 1\nCost (USD): 0.50\n\n";
+        String expected4 = "Vendor Name: Store 4\nItem Name: Candy\nQuantity in stock: 2\nCost (USD): 1.25\n\n" +
+                "Item Name: Gum\nQuantity in stock: 1\nCost (USD): 0.50\n\n";
+        String expected5 = "Vendor Name: Store 5\nItem Name: Candy\nQuantity in stock: 1\nCost (USD): 1.25\n\n" +
+                "Item Name: Gum\nQuantity in stock: 3\nCost (USD): 0.50\n\n";
+
+        String expected = expected1 + expected2 + expected4 + expected3 + expected5;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void print5VendorsInvalid(){
+        Vendor v1 = new Vendor(1, 2);
+        Vendor v2 = new Vendor(2, 2);
+        Vendor v3 = new Vendor(1, 1);
+        Vendor v4 = new Vendor(2, 1);
+        Vendor v5 = new Vendor(1, 3);
+        Vendors v = new Vendors();
+        v.addVendors("Store 1", v1);
+        v.addVendors("Store 2", v2);
+        v.addVendors("Store 3", v3);
+        v.addVendors("Store 4", v4);
+        v.addVendors("Store 5", v5);
+
+        String actual = v.print5Vendors("Store 1", "Store Banana", "Store 4", "Store 3", "Store 5");
+        String expected = "Invalid vendor list";
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void discountItems(){
+        Vendor v1 = new Vendor(2, 2);
+        v1.putItemOnSale("Candy", 1.00);
+        v1.addMoney(10);
+        v1.select("Candy");
+        assertEquals(9, v1.getBalance());
+        v1.endItemSale("Candy");
+        v1.select("Candy");
+        assertEquals(7.75, v1.getBalance());
+    }
+
+    @Test
+    void checkBestSellers(){
+        Vendor v1 = new Vendor(5, 2);
+        assertFalse(v1.getStock().get("Candy").bestseller);
+        v1.addMoney(100);
+        v1.select("Candy");
+        v1.select("Candy");
+        v1.select("Candy");
+        assertTrue(v1.getStock().get("Candy").bestseller);
     }
 }
