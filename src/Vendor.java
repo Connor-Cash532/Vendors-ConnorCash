@@ -26,6 +26,13 @@ class Vendor {
         this.balance = 0;
     }
 
+    Vendor(String[] names, Item[] items) {
+        for(int i = 0; i < names.length; i++){
+
+        }
+        this.balance = 0;
+    }
+
     /** resets the Balance to 0 */
     void resetBalance () {
         this.balance = 0;
@@ -65,6 +72,7 @@ class Vendor {
                 return "Item is out of stock";
             }
             else if (balance >= item.price) {
+                System.out.println(item);
                 item.purchase(1);
                 purchases.replace(name, purchases.get(name) + 1);
                 if(item.onSale){
@@ -151,6 +159,10 @@ class Vendor {
         return kFrequent;
     }
 
+    /**
+     * Marks items in the stock as bestsellers if they are greater than 2 times purchase frequency of the median purchased
+     * item in the stock.
+     */
     public void findBestsellers(){
         List<Integer> frequencies = new ArrayList<>(purchases.values());
         frequencies.sort(Collections.reverseOrder());
@@ -228,5 +240,37 @@ class Vendor {
             i.endDiscountPrice();
             stock.replace(itemName, i);
         }
+    }
+
+    final HashMap<String, Item> VALID_ITEMS = validItems();
+    private static HashMap<String, Item> validItems(){
+        HashMap<String, Item> temp = new HashMap<>();
+        temp.put("Cookies", new Item(2, (int) (100 * Math.random()) ));
+        temp.put("Shampoo", new Item(6, (int) (100 * Math.random()) ));
+        temp.put("Chips", new Item(1, (int) (100 * Math.random()) ));
+        temp.put("Candy", new Item(1.75, (int) (100 * Math.random()) ));
+        temp.put("Gum", new Item(0.5, (int) (100 * Math.random()) ));
+        temp.put("Turkey", new Item(10, (int) (100 * Math.random()) ));
+        temp.put("Chicken", new Item(5, (int) (100 * Math.random()) ));
+        temp.put("Ham", new Item(10, (int) (100 * Math.random()) ));
+        temp.put("Ice Cream", new Item(4, (int) (100 * Math.random()) ));
+        temp.put("Apple Pie", new Item(5, (int) (100 * Math.random()) ));
+        temp.put("Pasta", new Item(1.99, (int) (100 * Math.random()) ));
+        temp.put("Noodles", new Item(3, (int) (100 * Math.random()) ));
+        temp.put("Biscuits", new Item(2, (int) (100 * Math.random()) ));
+        temp.put("Cake", new Item(4, (int) (100 * Math.random()) ));
+        temp.put("Gumbo", new Item(5, (int) (100 * Math.random()) ));
+        temp.put("Steak", new Item(20, (int) (100 * Math.random()) ));
+        temp.put("Beef", new Item(9, (int) (100 * Math.random()) ));
+        temp.put("Soup", new Item(4, (int) (100 * Math.random()) ));
+        temp.put("Bread", new Item(3.50, (int) (100 * Math.random()) ));
+        temp.put("Eggs", new Item(2.75, (int) (100 * Math.random()) ));
+        temp.put("Milk", new Item(3.15, (int) (100 * Math.random()) ));
+        temp.put("Celery", new Item(2.15, (int) (100 * Math.random()) ));
+        temp.put("Garlic", new Item(1.15, (int) (100 * Math.random()) ));
+        temp.put("Bell Pepper", new Item(2.15, (int) (100 * Math.random()) ));
+        temp.put("Carrots", new Item(1.55, (int) (100 * Math.random()) ));
+        temp.put("Potatoes", new Item(1, (int) (100 * Math.random()) ));
+        return temp;
     }
 }
