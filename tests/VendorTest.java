@@ -271,4 +271,14 @@ public class VendorTest {
         v1.select("Candy");
         assertTrue(v1.getStock().get("Candy").bestseller);
     }
+
+    @Test
+    void getItemDescription(){
+        Item butter = new Item(4, 10);
+        butter.setBenefits("Makes food significantly more tasty. Is very good on bread");
+        butter.setDetails("4 Half Sticks of butter with 65% butterfat");
+
+        String expected = "Item price: 4.00\nItem benefits: Makes food significantly more tasty. Is very good on bread\nItem details: 4 Half Sticks of butter with 65% butterfat";
+        assertEquals(expected, butter.getItemDescription());
+    }
 }
