@@ -37,4 +37,12 @@ class Item {
         discountedPrice = price;
         onSale = false;
     }
+
+    public String toString(){
+        String s = "Item price: " + price;
+        s += "Item benefits: " + benefits;
+        s += "Item details: " + details;
+
+        return s;
+    }
 }
