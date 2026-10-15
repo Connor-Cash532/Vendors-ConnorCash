@@ -203,11 +203,18 @@ class Vendor {
         bestsellers = temp;
     }
 
-
+    /**
+     * Getter method for the stock
+     * @return
+     */
     public HashMap<String, Item> getStock() {
         return stock;
     }
 
+    /**
+     *
+     * @return string with Items the vendor has, their stock, and their cost.
+     */
     @Override
     public String toString(){
         String s = "";
@@ -249,6 +256,7 @@ class Vendor {
         }
     }
 
+    //Items that can be added to the store if unavailable during selection
     final static HashMap<String, Item> VALID_ITEMS = validItems();
     private static HashMap<String, Item> validItems(){
         HashMap<String, Item> temp = new HashMap<>();

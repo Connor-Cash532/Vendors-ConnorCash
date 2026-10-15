@@ -7,6 +7,7 @@ import static org.junit.gen5.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class VendorTest {
+    //Test that you can add money to a vendor and money most be positive.
     @Test
     void addMoney() {
         Vendor v1 = new Vendor(10, 10);
@@ -81,7 +82,7 @@ public class VendorTest {
     }
 
     /**
-     * Test for restock() method in Vendor.java
+     * Test for restock() method in Vendor.java (User Story 1)
      */
     @Test
     void restockEntireVendor(){
@@ -99,6 +100,7 @@ public class VendorTest {
         assertEquals(6.50, v1.getBalance());
     }
 
+    //Test for restocking a single item in a vendor if it is unavailable (User Story 2)
     @Test
     void restockSingleItem(){
         Vendor v1 = new Vendor(1, 2);
@@ -113,6 +115,7 @@ public class VendorTest {
 
     }
 
+    // Test for User Story 3
     @Test
     void changeItemName(){
         Vendor v1 = new Vendor(1, 2);
@@ -124,6 +127,7 @@ public class VendorTest {
         String expectedOutput = "Sorry, don't know that item";
         assertEquals(expectedOutput, actual);
     }
+
 
     @Test
     void vendors(){
@@ -164,6 +168,7 @@ public class VendorTest {
 
     }
 
+    //Test that empty vendor toString method shows the vendor has nothing.
     @Test
     void vendingEmptyToString(){
         Vendor v1 = new Vendor(1, 2);
@@ -174,6 +179,7 @@ public class VendorTest {
         assertEquals(expected, v1.toString());
     }
 
+    //Test for removing an item from a vendor's stock (User Story 5)
     @Test
     void removeItems(){
         Vendor v1 = new Vendor(1, 2);
@@ -187,8 +193,9 @@ public class VendorTest {
         assertEquals(expected, v1.toString());
     }
 
+    //
     @Test
-    void kFrequentPurchasedItems(){
+    void purchaseTrackingAndPopularItems(){
         Vendor v1 = new Vendor(1, 2);
         v1.select("Candy");
         v1.select("Oreo");
