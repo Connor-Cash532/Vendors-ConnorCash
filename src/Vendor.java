@@ -26,9 +26,16 @@ class Vendor {
         this.balance = 0;
     }
 
+    /**
+     * Overloaded constructor that takes in names for items and items
+     * @param names
+     * @param items
+     */
     Vendor(String[] names, Item[] items) {
         for(int i = 0; i < names.length; i++){
             stock.put(names[i], items[i]);
+            maxStocks.put(names[i], items[i].stock);
+            purchases.put(names[i], 0);
         }
         this.balance = 0;
     }
@@ -104,8 +111,7 @@ class Vendor {
             }
         }
         for(String s : stock.keySet()){
-            Item i  = stock.get(s);
-            i.restock(maxStocks.get(s));
+            restockItem(s);
         }
     }
 
@@ -115,7 +121,8 @@ class Vendor {
      */
     void restockItem(String name){
         Item i = stock.get(name);
-        i.restock(maxStocks.get(name));
+        int restockAmnt = maxStocks.get(name) - i.stock;
+        i.restock(restockAmnt);
     }
 
     /**

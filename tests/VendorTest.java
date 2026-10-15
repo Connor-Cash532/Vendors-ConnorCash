@@ -82,7 +82,7 @@ public class VendorTest {
     }
 
     /**
-     * Test for restock() method in Vendor.java (User Story 1)
+     * Test for restockEntireVendor() method in Vendor.java
      */
     @Test
     void restockEntireVendor(){
@@ -100,9 +100,9 @@ public class VendorTest {
         assertEquals(6.50, v1.getBalance());
     }
 
-    //Test for restocking a single item in a vendor if it is unavailable (User Story 2)
+    //Test for restocking out of stock items in a vendor if it is out of stock
     @Test
-    void restockSingleItem(){
+    void restockOutOfStockItems(){
         Vendor v1 = new Vendor(1, 2);
         v1.addMoney(10);
         v1.select("Gum");
@@ -112,7 +112,17 @@ public class VendorTest {
         assertEquals(8.50, v1.getBalance());
         v1.select("Gum");
         assertEquals(8.00, v1.getBalance());
+    }
 
+    //Test for manually restocking an item (User Story 1)
+    @Test
+    void restockItem(){
+        Vendor v1 = new Vendor(1, 2);
+        v1.addMoney(10);
+        v1.select("Gum");
+        v1.restockItem("Gum");
+        HashMap<String, Item> stock = v1.getStock();
+        assertEquals(2,stock.get("Gum").stock);
     }
 
     // Test for User Story 3
@@ -193,7 +203,7 @@ public class VendorTest {
         assertEquals(expected, v1.toString());
     }
 
-    //
+    //Test for user being able to track purchases and find the most sold items (User Story 6)
     @Test
     void purchaseTrackingAndPopularItems(){
         Vendor v1 = new Vendor(1, 2);
@@ -207,6 +217,7 @@ public class VendorTest {
         assertEquals(Arrays.toString(expected), Arrays.toString(v1.topKPurchasedItems(2)));
     }
 
+    //Test for user being able to track 5 vendors and print their stock (User Story 4)
     @Test
     void print5VendorsValid(){
         Vendor v1 = new Vendor(1, 2);
@@ -237,6 +248,7 @@ public class VendorTest {
         assertEquals(expected, actual);
     }
 
+    //Negative test for printing 5 vendors when one of the vendors is not in the system
     @Test
     void print5VendorsInvalid(){
         Vendor v1 = new Vendor(1, 2);
@@ -256,6 +268,7 @@ public class VendorTest {
         assertEquals(expected, actual);
     }
 
+    //Test for setting an item to be on discount (User Story 8)
     @Test
     void discountItems(){
         Vendor v1 = new Vendor(2, 2);
@@ -268,6 +281,7 @@ public class VendorTest {
         assertEquals(7.75, v1.getBalance());
     }
 
+    //Test that the system updates items as bestsellers based on their purchases
     @Test
     void checkBestSellers(){
         Vendor v1 = new Vendor(5, 2);
@@ -279,6 +293,7 @@ public class VendorTest {
         assertTrue(v1.getStock().get("Candy").bestseller);
     }
 
+    // Test that a vendor system dynamically changes inventory over time (User Story 2)
     @Test
     void addNewItems(){
         Vendor v1 = new Vendor(5, 2);
@@ -293,6 +308,7 @@ public class VendorTest {
         assertEquals(4, v1.getBalance());
     }
 
+    //Test that the user can see an item description and its benefits before purchasing.
     @Test
     void getItemDescription(){
         Item butter = new Item(4, 10);
@@ -301,5 +317,30 @@ public class VendorTest {
 
         String expected = "Item price: 4.00\nItem benefits: Makes food significantly more tasty. Is very good on bread\nItem details: 4 Half Sticks of butter with 65% butterfat";
         assertEquals(expected, butter.getItemDescription());
+    }
+
+    @Test
+    void overloadConstructor(){
+        Item[] items = {
+                new Item(4, 6),
+                new Item(3, 5),
+                new Item(1, 8),
+                new Item(5, 1),
+                new Item(6, 3),
+                new Item(9, 4),
+
+        };
+        String[] names = {
+                "Coke",
+                "Sprite",
+                "Fanta",
+                "Pop",
+                "Pork",
+                "Bacon"
+        };
+        Vendor v1 = new Vendor(names, items);
+        v1.addMoney(100);
+        v1.select("Coke");
+        assertEquals(96, v1.getBalance());
     }
 }
